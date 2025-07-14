@@ -1,5 +1,5 @@
-node_modules
 # dependencies
+node_modules
 /node_modules
 
 # testing
@@ -12,17 +12,31 @@ node_modules
 # production
 /build
 
-# misc
+# System files
 /dist
 .DS_Store
 *.pem
+Thumbs.db
 
-# debug
+# Log files
 npm-debug.log*
-.pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# Environments
+.env
+.env*.local
+*.env
+
+# IDE / Editor specific
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # vercel
 .vercel
@@ -43,3 +57,10 @@ node_modules/
 
 # Firebase Admin SDK Service Account Key
 firebase-service-account.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
