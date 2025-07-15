@@ -5,11 +5,9 @@ from .database import Base
 
 class User(Base):
     __tablename__ = "users"
-
-    id = Column(String, primary_key=True, index=True) # Firebase UIDを使用
+    id = Column(String, primary_key=True, index=True) # Firebase UIDを保存
     email = Column(String, unique=True, index=True, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-
     daily_reports = relationship("DailyReport", back_populates="owner")
 
 class DailyReport(Base):

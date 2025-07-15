@@ -29,6 +29,4 @@ class User(UserBase):
     id: str
     created_at: datetime
     daily_reports: List[DailyReport] = []
-
-    class Config:
-        from_attributes = True # v2: orm_mode = True
+    class Config: from_attributes = True
