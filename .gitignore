@@ -1,2 +1,70 @@
+ feature/FE-03-setup-environment
+# dependencies
+node_modules
+/node_modules
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# System files
+/dist
+.DS_Store
+*.pem
+Thumbs.db
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environments
+.env
+.env*.local
+*.env
+
+# IDE / Editor specific
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Coverage report
+/coverage
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Firebase Admin SDK Service Account Key
+firebase-service-account.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
 venv/
 .env
+ develop
