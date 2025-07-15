@@ -1,21 +1,18 @@
 import os
 from dotenv import load_dotenv
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.routers import users, daily_reports
 
-from app.routers import daily_reports
-from app import models, schemas, auth
-from app.database import engine
-
-app = FastAPI()
-
+# .envファイルを最初に読み込む
 load_dotenv()
 
+
 app = FastAPI()
 
-# CORS設定
+# CORS設定によりフロントエンドからのアクセスを許可する
 origins = [
-    os.getenv("FRONTEND_URL", "http://localhost:3001"),
+    os.getenv("FRONTEND_URL", "http://localhost:3000") 
 ]
 
 app.add_middleware(
@@ -26,14 +23,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# 作成したルーターにアクセスできるようにするためのコード
+app.include_router(users.router)
 app.include_router(daily_reports.router)
 
-# TO DO:32−34行目はサンプルコード。フロントエンドからログイン済みのIDトークンを付けてこのAPIを呼び出したときに、
-# 自分のユーザー情報が正しく返ってくれば、「Firebaseとの認証連携がうまくいっている」確認できる。確認できたら削除する。
-@app.get("/users/me", response_model=schemas.User)
-async def read_users_me(current_user: schemas.User = Depends(auth.get_current_user)):
-    return current_user
-
+# サーバーの起動を確認するためのルートエンドポイント
 @app.get("/")
 def read_root():
     return {"Hello": "World"}

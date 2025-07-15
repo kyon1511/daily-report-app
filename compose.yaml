@@ -3,6 +3,8 @@ services:
     image: postgres:16
     shm_size: 128mb
     restart: always
+    env_file:
+      - ./Backend/.env
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
