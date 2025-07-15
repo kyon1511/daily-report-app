@@ -1,9 +1,17 @@
+import os
+import firebase_admin
+from firebase_admin import credentials, auth
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError
 from sqlalchemy.orm import Session
-from . import crud, models, schemas, security
+from . import crud, schemas
 from .database import get_db
+
+cred_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+if cred_path and os.path.exists(cred_path):
+    cred = credentials.Certificate(cred_path)
+    if not firebase_admin._apps:
+        firebase_admin.initialize_app(cred)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -14,14 +22,16 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = security.jwt.decode(token, security.SECRET_KEY, algorithms=[security.ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise credentials_exception
-        token_data = schemas.TokenData(email=email)
-    except JWTError:
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token["uid"]
+        email = decoded_token.get("email")
+    except Exception:
         raise credentials_exception
-    user = crud.get_user_by_email(db, email=token_data.email)
+
+    user = crud.get_user(db, user_id=uid)
     if user is None:
-        raise credentials_exception
+        if email is None:
+             raise HTTPException(status_code=400, detail="Email not found in token")
+        user_in = schemas.UserCreate(id=uid, email=email)
+        user = crud.create_user(db, user=user_in)
     return user
