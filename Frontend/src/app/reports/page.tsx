@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../lib/firebase"; //Firebase の初期化コード
-import { ROUTES } from "../lib/routes";
+
+import { auth } from "@/lib/firebase"; //Firebase の初期化コード
+import { ROUTES } from "@/lib/routes"; //新規と編集ページの定義
 
 type Report = {
   id: number;
@@ -14,25 +15,33 @@ type Report = {
 };
 
 export default function ReportsPage() {
-  const [user, loadingAuth] = useAuthState(auth);
+  const [user, loadingAuth] = useAuthState(auth); //認証状態
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [error, setError] = useState<Error | null>(null);
 
+  //テスト用　ログイン画面後削除
   useEffect(() => {
     if (loadingAuth) return;
+    console.warn("未ログイン（開発中）"); //ログイン画面が繋がったら削除
 
-    if (!user) {
-      router.push("/"); // ログイン画面へ
-      return;
-    }
+    //ログイン画面が接続されたら解除
+    // useEffect(() => {
+    //   if (!loadingAuth && !user) {
+    //     router.push("/");
+    //     return;
+    //   }
+    // }, [user, loadingAuth, router]);
+
+    // useEffect(() => {
+    //   if (!user || loadingAuth) return;
 
     const fetchReports = async () => {
       try {
-        const token = await user.getIdToken();
-
+        // const token = await user.getIdToken(); //ログイン画面がつながれば解除する
+        const token = user ? await user.getIdToken() : ""; //ログイン画面がつながれば削除する
         const res = await fetch(`${API_URL}/api/reports`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,7 +53,7 @@ export default function ReportsPage() {
         const data = await res.json();
         setReports(data);
       } catch (error) {
-        console.error("取得エラー:", error);
+        console.error("取得エラー:", error); // エラーログ
         setError(error as Error);
       } finally {
         setLoading(false);
