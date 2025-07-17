@@ -10,8 +10,7 @@ import { ROUTES } from "@/lib/routes"; //新規と編集ページの定義
 
 type Report = {
   id: number;
-  date: string;
-  content: string;
+  report_date: Date;
 };
 
 export default function ReportsPage() {
@@ -181,7 +180,11 @@ export default function ReportsPage() {
                   }}
                 >
                   <span style={{ fontWeight: "500", color: "#374151" }}>
-                    {report.date}
+                    {report.report_date.toLocaleDateString("ja-JP", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    })}
                   </span>
                   <Link href={ROUTES.REPORT_EDIT(report.id)}>
                     <button
@@ -199,11 +202,6 @@ export default function ReportsPage() {
                     </button>
                   </Link>
                 </div>
-                <p style={{ color: "#4b5563" }}>
-                  {report.content.length > 50
-                    ? report.content.slice(0, 50) + "..."
-                    : report.content}
-                </p>
               </li>
             ))}
           </ul>
