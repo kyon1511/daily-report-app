@@ -1,4 +1,4 @@
-# Backendディレクトリで、仮想環境を有効にした後
+﻿# Backendディレクトリで、仮想環境を有効にした後
 # uv pip install -r requirements.txtを実行すること
 
 alembic==1.16.4
