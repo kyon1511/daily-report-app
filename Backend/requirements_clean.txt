@@ -1,5 +1,4 @@
-# Backendディレクトリで、仮想環境を有効にした後
-# uv pip install -r requirements.txtを実行すること
+﻿# Backend繝・ぅ繝ｬ繧ｯ繝医Μ縺ｧ縲∽ｻｮ諠ｳ迺ｰ蠅・ｒ譛牙柑縺ｫ縺励◆蠕・# uv pip install -r requirements.txt繧貞ｮ溯｡後☆繧九％縺ｨ
 
 alembic==1.16.4
 annotated-types==0.7.0
