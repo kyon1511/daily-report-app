@@ -1,37 +1,37 @@
-// import React, { createContext, useContext, useEffect, useState } from "react";
-// import { User, getAuth, onAuthStateChanged } from "firebase/auth";
-// import firebaseApp from "../app/lib/FirebaseConfig"; // ←自分のパスに合わせて修正
+// src/context/AuthContext.tsx
+'use client';
 
-// type AuthContextType = {
-//   user: User | null;
-//   loading: boolean;
-// };
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { auth } from '../lib/firebase'; // ← ここが重要！
 
-// const AuthContext = createContext<AuthContextType>({
-//   user: null,
-//   loading: true,
-// });
+type AuthContextType = {
+  user: User | null;
+  loading: boolean;
+};
 
-// export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-//   children,
-// }) => {
-//   const [user, setUser] = useState<User | null>(null);
-//   const [loading, setLoading] = useState(true);
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+});
 
-//   useEffect(() => {
-//     const auth = getAuth(firebaseApp);
-//     const unsubscribe = onAuthStateChanged(auth, (user) => {
-//       setUser(user);
-//       setLoading(false);
-//     });
-//     return () => unsubscribe();
-//   }, []);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-//   return (
-//     <AuthContext.Provider value={{ user, loading }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
-// export const useAuth = () => useContext(AuthContext);
+  return (
+    <AuthContext.Provider value={{ user, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => useContext(AuthContext);
