@@ -4,22 +4,23 @@
 import styles from "../../page.module.css";
 import { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import firebaseApp from "../lib/FirebaseConfig";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { auth } from "@/lib/firebase";
 
 export default function LoginHome() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const router = useRouter();
   //フォーム送信時にページリロードを防ぎ、Firebaseでログイン処理を実行
   const doLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         alert("ログインOK!");
         console.log(user);
+        router.push("/reports");
       })
       .catch((error) => {
         alert("ログイン失敗");

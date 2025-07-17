@@ -22,26 +22,19 @@ export default function ReportsPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [error, setError] = useState<Error | null>(null);
 
-  //テスト用　ログイン画面後削除
   useEffect(() => {
-    if (loadingAuth) return;
-    console.warn("未ログイン（開発中）"); //ログイン画面が繋がったら削除
+    if (!loadingAuth && !user) {
+      router.push("/");
+      return;
+    }
+  }, [user, loadingAuth, router]);
 
-    //ログイン画面が接続されたら解除
-    // useEffect(() => {
-    //   if (!loadingAuth && !user) {
-    //     router.push("/");
-    //     return;
-    //   }
-    // }, [user, loadingAuth, router]);
-
-    // useEffect(() => {
-    //   if (!user || loadingAuth) return;
+  useEffect(() => {
+    if (!user || loadingAuth) return;
 
     const fetchReports = async () => {
       try {
-        // const token = await user.getIdToken(); //ログイン画面がつながれば解除する
-        const token = user ? await user.getIdToken() : ""; //ログイン画面がつながれば削除する
+        const token = await user.getIdToken();
         const res = await fetch(`${API_URL}/api/reports`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,50 +56,159 @@ export default function ReportsPage() {
     fetchReports();
   }, [user, loadingAuth, router, API_URL]);
 
-  if (loadingAuth || loading) return <p>読み込み中です...</p>;
+  if (loadingAuth || loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 text-gray-600">
+        <p>読み込み中です...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-xl mx-auto mt-8 px-4">
-      <h1 className="text-2xl font-bold mb-4">デイリーレポート一覧</h1>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "1rem",
+        background: "linear-gradient(to bottom right, #f3f4f6, #e5e7eb)",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "768px",
+          backgroundColor: "#fff",
+          padding: "2rem",
+          borderRadius: "1rem",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "2rem",
+            fontWeight: "bold",
+            textAlign: "center",
+            color: "#2563eb",
+            marginBottom: "1.5rem",
+          }}
+        >
+          Daily Report
+        </h1>
 
-      {error && <p className="text-red-500">{error.message}</p>}
-
-      <div className="mb-4">
-        <Link href={ROUTES.REPORT_NEW}>
-          <button
-            type="button"
-            className="px-4 py-2 bg-blue-600 text-white rounded"
+        {error && (
+          <p
+            style={{
+              color: "#e28080ff",
+              marginBottom: "1rem",
+              textAlign: "center",
+            }}
           >
-            ＋ 新規作成
-          </button>
-        </Link>
-      </div>
+            {error.message}
+          </p>
+        )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <Link href={ROUTES.REPORT_NEW}>
+            <button
+              style={{
+                width: 220,
+                height: 50,
+                fontSize: "1.2rem",
+                backgroundColor: "#6e6b6bff",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                transition: "background-color 0.3s",
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#7a7878ff")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#000000")
+              }
+            >
+              ＋ 新規作成
+            </button>
+          </Link>
+        </div>
 
-      {reports.length === 0 ? (
-        <p>まだレポートがありません。</p>
-      ) : (
-        <ul className="space-y-4">
-          {reports.map((report) => (
-            <li key={report.id} className="p-4 border rounded shadow-sm">
-              <strong>{report.date}</strong>
-              <p>
-                {report.content.length > 50
-                  ? report.content.slice(0, 50) + "..."
-                  : report.content}
-              </p>
-
-              <Link href={ROUTES.REPORT_EDIT(report.id)}>
-                <button
-                  type="button"
-                  className="mt-2 px-3 py-1 border rounded bg-gray-100"
+        {reports.length === 0 ? (
+          <p style={{ textAlign: "center", color: "#6b7280" }}>
+            まだレポートがありません。
+          </p>
+        ) : (
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              gap: "1rem",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {reports.map((report) => (
+              <li
+                key={report.id}
+                style={{
+                  padding: "1rem",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "1rem",
+                  backgroundColor: "#f9fafb",
+                  transition: "box-shadow 0.3s",
+                  cursor: "default",
+                }}
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.boxShadow =
+                    "0 5px 15px rgba(0,0,0,0.1)")
+                }
+                onMouseOut={(e) => (e.currentTarget.style.boxShadow = "none")}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "0.5rem",
+                  }}
                 >
-                  編集
-                </button>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+                  <span style={{ fontWeight: "500", color: "#374151" }}>
+                    {report.date}
+                  </span>
+                  <Link href={ROUTES.REPORT_EDIT(report.id)}>
+                    <button
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "#2563eb",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: 0,
+                        textDecoration: "underline",
+                      }}
+                    >
+                      編集
+                    </button>
+                  </Link>
+                </div>
+                <p style={{ color: "#4b5563" }}>
+                  {report.content.length > 50
+                    ? report.content.slice(0, 50) + "..."
+                    : report.content}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
