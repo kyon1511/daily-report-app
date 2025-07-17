@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 // import { useAuth } from "../context/AuthContext"; // TODO: 正しいパスに修正してください
 // import { fetcher } from "../lib/fetcher"; // TODO: fetcher関数を作成してください
+import Link from "next/link";
 
 // 日報データの型を定義
 interface DailyReportFormState {
@@ -113,7 +114,6 @@ export default function AdminCreateDailyReportPage() {
       fontSize: "1rem",
 
       boxSizing: "border-box" as const,
-
     },
     textarea: {
       width: "100%",
@@ -124,8 +124,7 @@ export default function AdminCreateDailyReportPage() {
       minHeight: "100px",
 
       resize: "vertical" as const,
-      boxSizing: "border-box" as const, 
-
+      boxSizing: "border-box" as const,
     },
     button: {
       width: "100%",
@@ -148,6 +147,24 @@ export default function AdminCreateDailyReportPage() {
         >
           日報作成
         </h1>
+        <div style={{ marginBottom: "1rem", textAlign: "center" }}>
+          <Link href="/reports">
+            <button
+              type="button"
+              style={{
+                padding: "0.5rem 1rem",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                backgroundColor: "#f3f4f6",
+                color: "#333",
+                cursor: "pointer",
+              }}
+            >
+              一覧画面に戻る
+            </button>
+          </Link>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <div style={styles.formGroup}>
             <label htmlFor="report_date" style={styles.label}>
