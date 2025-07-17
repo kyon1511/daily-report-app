@@ -54,3 +54,13 @@ def edit_daily_report(db: Session, report_id: int, report_update: schemas.DailyR
     db.commit()
     db.refresh(db_report)
     return db_report    
+
+# note :管理画面でユーザーIDを元にユーザーの名前を更新するCRUD
+def update_user_name(db: Session, user_id: str, name: str):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if db_user is None:
+        return None 
+    db_user.name = name
+    db.commit()
+    db.refresh(db_user)
+    return db_user    
