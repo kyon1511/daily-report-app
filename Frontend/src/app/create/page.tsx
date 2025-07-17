@@ -111,7 +111,9 @@ export default function AdminCreateDailyReportPage() {
       border: "1px solid #ccc",
       borderRadius: "4px",
       fontSize: "1rem",
+
       boxSizing: "border-box" as const,
+
     },
     textarea: {
       width: "100%",
@@ -120,8 +122,10 @@ export default function AdminCreateDailyReportPage() {
       borderRadius: "4px",
       fontSize: "1rem",
       minHeight: "100px",
-      resize: "vertical" as "vertical",
-      boxSizing: "border-box" as const,
+
+      resize: "vertical" as const,
+      boxSizing: "border-box" as const, 
+
     },
     button: {
       width: "100%",
