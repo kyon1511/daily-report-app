@@ -1,13 +1,16 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, Date, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.sql import func
 from .database import Base
+from typing import Optional
+from datetime import date
+from pydantic import BaseModel
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(String, primary_key=True, index=True, comment="Firebase UID") # Firebase UIDを保存
-    name = Column(String, nullable=True, comment="ユーザー名")
-    email = Column(String, unique=True, index=True, nullable=False, comment="メールアドレス")
+    id: Mapped[str] = mapped_column(String, primary_key=True, index=True, comment="Firebase UID") # Firebase UIDを保存
+    name: Mapped[Optional[str]] = mapped_column(String, nullable=True, comment="ユーザー名")
+    email: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False, comment="メールアドレス")
     created_at = Column(DateTime(timezone=True), server_default=func.now(), comment="作成日時")
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), comment="更新日時")
     daily_reports = relationship("DailyReport", back_populates="owner")

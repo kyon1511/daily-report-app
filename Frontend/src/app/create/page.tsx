@@ -2,9 +2,8 @@
 "use client";
 
 import React, { useState } from "react";
-// import { useAuth } from "../context/AuthContext"; // TODO: 正しいパスに修正してください
-// import { fetcher } from "../lib/fetcher"; // TODO: fetcher関数を作成してください
-import Link from "next/link";
+import { useAuth } from "../../context/AuthContext";
+import { fetcher } from "../../lib/fetcher";
 
 // 日報データの型を定義
 interface DailyReportFormState {
@@ -16,13 +15,65 @@ interface DailyReportFormState {
   other_notes: string;
 }
 
-export default function AdminCreateDailyReportPage() {
-  // const { user } = useAuth(); // AuthContextからログインユーザー情報を取得
+// スタイル定義（変更なし）
+const styles = {
+  pageContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    padding: "2rem",
+    background: "#f0f2f5",
+  },
+  formContainer: {
+    width: "100%",
+    maxWidth: "600px",
+    padding: "24px",
+    background: "#fff",
+    borderRadius: "8px",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+  },
+  formGroup: {
+    marginBottom: "1.5rem",
+  },
+  label: {
+    display: "block",
+    marginBottom: "0.5rem",
+    fontWeight: "bold",
+    color: "#333",
+  },
+  input: {
+    width: "100%",
+    padding: "0.75rem",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    fontSize: "1rem",
 
-  // AuthContextがまだないため、テスト用に仮のユーザーオブジェクトを用意
-  const user = {
-    getIdToken: async () => "これはテスト用の仮IDトークンです",
-  };
+    boxSizing: "border-box" as const,
+  },
+  textarea: {
+    width: "100%",
+    padding: "0.75rem",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    fontSize: "1rem",
+    minHeight: "100px",
+
+    resize: "vertical" as const,
+    boxSizing: "border-box" as const,
+  },
+  button: {
+    width: "100%",
+    padding: "0.75rem",
+    border: "none",
+    borderRadius: "4px",
+    fontSize: "1.2rem",
+    cursor: "pointer",
+  },
+};
+
+export default function CreateDailyReportPage() {
+  const { user, loading } = useAuth();
 
   // 日付の初期値を設定
   const date = new Date();
@@ -52,25 +103,17 @@ export default function AdminCreateDailyReportPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    console.log("送信データ", formData);
     if (!user) {
       alert("ログインしていません。");
       return;
     }
 
     try {
-      const token = await user.getIdToken();
-      console.log("取得したIDトークン:", token);
-      console.log("送信するフォームデータ:", formData);
-
-      // TODO: バックエンドAPIが完成したら、以下のAPI呼び出し処理を有効化する
-      // await fetcher('/daily-reports', {
-      //   method: 'POST',
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: formData,
-      // });
+      await fetcher("/daily-reports", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
 
       alert("日報が正常に送信されました！");
     } catch (error) {
@@ -79,61 +122,13 @@ export default function AdminCreateDailyReportPage() {
     }
   };
 
-  // スタイル定義（変更なし）
-  const styles = {
-    pageContainer: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "100vh",
-      padding: "2rem",
-      background: "#f0f2f5",
-    },
-    formContainer: {
-      width: "100%",
-      maxWidth: "600px",
-      padding: "24px",
-      background: "#fff",
-      borderRadius: "8px",
-      boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-    },
-    formGroup: {
-      marginBottom: "1.5rem",
-    },
-    label: {
-      display: "block",
-      marginBottom: "0.5rem",
-      fontWeight: "bold",
-      color: "#333",
-    },
-    input: {
-      width: "100%",
-      padding: "0.75rem",
-      border: "1px solid #ccc",
-      borderRadius: "4px",
-      fontSize: "1rem",
+  if (loading) {
+    return <div>認証状態を確認中...</div>;
+  }
+  if (!user) {
+    return <div>ログインしていません。</div>;
+  }
 
-      boxSizing: "border-box" as const,
-    },
-    textarea: {
-      width: "100%",
-      padding: "0.75rem",
-      border: "1px solid #ccc",
-      borderRadius: "4px",
-      fontSize: "1rem",
-      minHeight: "100px",
-
-      resize: "vertical" as const,
-      boxSizing: "border-box" as const,
-    },
-    button: {
-      width: "100%",
-      padding: "0.75rem",
-      border: "none",
-      borderRadius: "4px",
-      fontSize: "1.2rem",
-    },
-  };
 
   return (
     <div style={styles.pageContainer}>

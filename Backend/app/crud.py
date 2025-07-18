@@ -35,6 +35,7 @@ def create_daily_report(db: Session, report: schemas.DailyReportCreate, owner_id
     db.add(db_report)
     db.commit()
     db.refresh(db_report)
+    return db_report
 
 # note :特定のユーザーの日報を取編集するCRUD（担当：日報編集担当者） 
 def edit_daily_report(db: Session, report_id: int, report_update: schemas.DailyReportCreate, owner_id: str):

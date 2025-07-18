@@ -16,10 +16,14 @@ export default function LoginHome() {
   const doLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
         alert("ログインOK!");
         console.log(user);
+        const token = await user.getIdToken();
+        // TODO: 本番リリース前には必ず削除すること!
+        // DEBUG: Postmanでのテスト用にIDトークンをコンソールに出力
+        console.log("Firebase ID Tokenはこれだよ:", token);
         router.push("/reports");
       })
       .catch((error) => {
