@@ -1,9 +1,12 @@
+
 import { auth } from "./firebase";
+
 
 export const fetcher = async <T>(
   url: string,
   options: RequestInit = {}
 ): Promise<T> => {
+
   try {
     // 認証トークンの準備
     const user = auth.currentUser;

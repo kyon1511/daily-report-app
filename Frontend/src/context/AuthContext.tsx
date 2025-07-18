@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, {
@@ -20,9 +21,11 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
 });
 
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +35,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []); // 【重要】依存配列を空にすることで、この処理が初回の一度だけ実行されるようにします。
+
+  }, []); // 
+
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
