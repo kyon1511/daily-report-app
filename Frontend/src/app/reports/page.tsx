@@ -34,7 +34,7 @@ export default function ReportsPage() {
     const fetchReports = async () => {
       try {
         const token = await user.getIdToken();
-        const res = await fetch(`${API_URL}/api/reports`, {
+        const res = await fetch(`${API_URL}/daily-reports`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -180,13 +180,11 @@ export default function ReportsPage() {
                   }}
                 >
                   <span style={{ fontWeight: "500", color: "#374151" }}>
-
-                    {report.report_date.toLocaleDateString("ja-JP", {
+                    {new Date(report.report_date).toLocaleDateString("ja-JP", {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
                     })}
-
                   </span>
                   <Link href={ROUTES.REPORT_EDIT(report.id)}>
                     <button
