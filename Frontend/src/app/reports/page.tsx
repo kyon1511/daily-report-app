@@ -179,14 +179,13 @@ export default function ReportsPage() {
                     marginBottom: "0.5rem",
                   }}
                 >
-
-                  <span style={{ fontWeight: "500", color: "#374151" }}>
+                  {/* <span style={{ fontWeight: "500", color: "#374151" }}>
                     {new Date(report.report_date).toLocaleDateString("ja-JP", {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
                     })}
-                  </span>
+                  </span> */}
                   <Link href={ROUTES.REPORT_EDIT(report.id)}>
                     <span
                       style={{

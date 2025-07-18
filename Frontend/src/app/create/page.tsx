@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { fetcher } from "../../lib/fetcher";
+import Link from "next/link";
 
 // 日報データの型を定義
 interface DailyReportFormState {
@@ -128,7 +129,6 @@ export default function CreateDailyReportPage() {
   if (!user) {
     return <div>ログインしていません。</div>;
   }
-
 
   return (
     <div style={styles.pageContainer}>
