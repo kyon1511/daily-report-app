@@ -1,21 +1,40 @@
 'use client';
 
-import React from 'react';
-import{ useRouter } from 'next/navigation';
-import{ useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { fetchReportById } from '@/lib/api/report';
 
 export default function EditReportPage() {
-    const router = useRouter();
+  const { id } = useParams(); // URLの[id]を取得
+  const [report, setReport] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        console.log('編集ページにアクセスされました');
+  useEffect(() => {
+    const getReport = async () => {
+      try {
+        console.log('取得したid:', id);
 
-    }, []);
+        if (typeof id === 'string') {
+          const data = await fetchReportById(id);
+          setReport(data);
+        }
+      } catch (error) {
+        console.error('レポート取得エラー:', error);
+        alert('レポートの取得に失敗しました');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return (
-    <main className="p-4">
-      <h1 className="text-xl font-bold mb-4">レポート編集ページ</h1>
-      <p>ここに編集フォームを作成していきます。</p>
-    </main>
+    getReport();
+  }, [id]);
+
+  if (loading) return <p>読み込み中...</p>;
+
+  return (
+    <div>
+      <h1>レポート編集ページ</h1>
+      <pre>{JSON.stringify(report, null, 2)}</pre>
+    </div>
   );
 }

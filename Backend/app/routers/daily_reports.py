@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from .. import crud, models, schemas, auth
 from ..database import get_db
+from fastapi import HTTPException, status
 
 router = APIRouter(
     prefix="/daily-reports",
@@ -29,3 +30,25 @@ def read_reports(
     ログインしているユーザーの日報を一覧で取得するためのAPIエンドポイント
     """
     return crud.get_daily_reports(db, owner_id=current_user.id)
+
+
+@router.put("/{report_id}", response_model=schemas.DailyReport)
+def update_report(
+    report_id: int,
+    report_update: schemas.DailyReportCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user),
+):
+    """
+    ログインユーザーが指定した日報を編集（更新）するエンドポイント
+    """
+    db_report = crud.edit_daily_report(
+        db=db, report_id=report_id, report_update=report_update, owner_id=current_user.id
+    )
+
+    if db_report is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="日報が見つかりません")
+
+    return db_report
+
+
