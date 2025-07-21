@@ -1,8 +1,14 @@
 import os
+from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import users, daily_reports
+
+from fastapi import HTTPException
+from sqlalchemy import text
+from app.database import get_db
+from fastapi import Depends
 
 # .envファイルを最初に読み込む
 load_dotenv()
@@ -31,3 +37,13 @@ app.include_router(daily_reports.router)
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+from sqlalchemy import text  # ← 追加！
+
+@app.get("/db-check")
+def db_check(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("SELECT 1"))  # ← text() で囲むのがポイント！
+        return {"status": "connected"}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
