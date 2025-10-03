@@ -195,7 +195,7 @@ export default function ReportsPage() {
 
                   {/* 編集リンク */}
                   <Link
-                    href={`/${report.id}/edit`}
+                    href={`/reports/${report.id}/edit`}
                     style={{
                       fontWeight: '500',
                       color: '#2563eb',
