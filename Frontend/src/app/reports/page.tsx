@@ -174,18 +174,23 @@ export default function ReportsPage() {
                 <div
                   style={{
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'space-between', // ← 日付左・編集右
                     alignItems: 'center',
                     marginBottom: '0.5rem',
                   }}
                 >
-                  {/* <span style={{ fontWeight: "500", color: "#374151" }}>
-                    {new Date(report.report_date).toLocaleDateString("ja-JP", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
+                  {/* 日付表示 */}
+                  <span
+                    style={{
+                      fontWeight: '500',
+                      color: '#6b7280',
+                    }}
+                  >
+                    {new Date(report.report_date).toLocaleDateString('ja-JP', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
                     })}
-
                   </span>
 
                   {/* 編集リンク */}
