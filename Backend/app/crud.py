@@ -65,3 +65,17 @@ def update_user_name(db: Session, user_id: str, name: str):
     db.commit()
     db.refresh(db_user)
     return db_user    
+
+# note :編集画面でレポート削除するCRUD
+def delete_daily_report(db: Session, report_id: int, owner_id: str):
+    db_report = db.query(models.DailyReport).filter(
+        models.DailyReport.id == report_id,
+        models.DailyReport.owner_id == owner_id
+    ).first()
+
+    if db_report is None:
+        return None
+
+    db.delete(db_report)
+    db.commit()
+    return db_report
