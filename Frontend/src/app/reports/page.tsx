@@ -136,7 +136,10 @@ export default function ReportsPage() {
         </div>
 
         {reports.length === 0 ? (
-          <p style={{ textAlign: 'center', color: '#6b7280' }}>まだレポートがありません。</p>
+
+          <p style={{ textAlign: 'center', color: '#6b7280' }}>
+            まだレポートがありません。
+          </p>
         ) : (
           <ul
             style={{
@@ -161,22 +164,32 @@ export default function ReportsPage() {
                 }}
                 onMouseOver={(e) =>
                   (e.currentTarget.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)')
+                  (e.currentTarget.style.boxShadow =
+                    '0 5px 15px rgba(0,0,0,0.1)')
+
                 }
                 onMouseOut={(e) => (e.currentTarget.style.boxShadow = 'none')}
               >
                 <div
                   style={{
                     display: 'flex',
-                    justifyContent: 'space-between',
+
+                    justifyContent: 'space-between', 
                     alignItems: 'center',
                     marginBottom: '0.5rem',
                   }}
                 >
-                  {/* <span style={{ fontWeight: "500", color: "#374151" }}>
-                    {new Date(report.report_date).toLocaleDateString("ja-JP", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
+                  {/* 日付表示 */}
+                  <span
+                    style={{
+                      fontWeight: '500',
+                      color: '#6b7280',
+                    }}
+                  >
+                    {new Date(report.report_date).toLocaleDateString('ja-JP', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
                     })}
                   </span> */}
                   <Link href={ROUTES.REPORT_EDIT(report.id)}>
@@ -194,6 +207,19 @@ export default function ReportsPage() {
                         day: '2-digit',
                       })}
                     </span>
+                  </span>
+
+                  {/* 編集リンク */}
+                  <Link
+                    href={`/reports/${report.id}/edit`}
+                    style={{
+                      fontWeight: '500',
+                      color: '#2563eb',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    編集
                   </Link>
                 </div>
               </li>
