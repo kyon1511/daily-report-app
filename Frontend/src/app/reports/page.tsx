@@ -127,12 +127,8 @@ export default function ReportsPage() {
                 cursor: 'pointer',
                 transition: 'background-color 0.3s',
               }}
-              onMouseOver={(e) =>
-                (e.currentTarget.style.backgroundColor = '#7a7878ff')
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.backgroundColor = '#4a4949ff')
-              }
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#7a7878ff')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#4a4949ff')}
             >
               ＋ 新規作成
             </button>
@@ -140,6 +136,7 @@ export default function ReportsPage() {
         </div>
 
         {reports.length === 0 ? (
+
           <p style={{ textAlign: 'center', color: '#6b7280' }}>
             まだレポートがありません。
           </p>
@@ -166,15 +163,18 @@ export default function ReportsPage() {
                   cursor: 'default',
                 }}
                 onMouseOver={(e) =>
+                  (e.currentTarget.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)')
                   (e.currentTarget.style.boxShadow =
                     '0 5px 15px rgba(0,0,0,0.1)')
+
                 }
                 onMouseOut={(e) => (e.currentTarget.style.boxShadow = 'none')}
               >
                 <div
                   style={{
                     display: 'flex',
-                    justifyContent: 'space-between', // ← 日付左・編集右
+
+                    justifyContent: 'space-between', 
                     alignItems: 'center',
                     marginBottom: '0.5rem',
                   }}
@@ -191,6 +191,22 @@ export default function ReportsPage() {
                       month: '2-digit',
                       day: '2-digit',
                     })}
+                  </span> */}
+                  <Link href={ROUTES.REPORT_EDIT(report.id)}>
+                    <span
+                      style={{
+                        fontWeight: '500',
+                        color: '#6b7280',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {new Date(report.report_date).toLocaleDateString('ja-JP', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                      })}
+                    </span>
                   </span>
 
                   {/* 編集リンク */}

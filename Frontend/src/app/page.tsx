@@ -1,16 +1,16 @@
 //TODO バリデーション実装する
-"use client";
+'use client';
 
-import styles from "../../page.module.css";
-import { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
+import styles from '../../page.module.css';
+import { useState } from 'react';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { auth } from '@/lib/firebase';
 
 export default function LoginHome() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
   //フォーム送信時にページリロードを防ぎ、Firebaseでログイン処理を実行
   const doLogin = (event: React.FormEvent<HTMLFormElement>) => {
@@ -18,16 +18,16 @@ export default function LoginHome() {
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
-        alert("ログインOK!");
+        alert('ログインOK!');
         console.log(user);
         const token = await user.getIdToken();
         // TODO: 本番リリース前には必ず削除すること!
         // DEBUG: Postmanでのテスト用にIDトークンをコンソールに出力
-        console.log("Firebase ID Tokenはこれだよ:", token);
-        router.push("/reports");
+        console.log('Firebase ID Tokenはこれだよ:', token);
+        router.push('/reports');
       })
       .catch((error) => {
-        alert("ログイン失敗");
+        alert('ログイン失敗');
         console.log(error);
       });
   };
@@ -35,37 +35,32 @@ export default function LoginHome() {
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        minHeight: "100vh",
-        padding: "0 10vw",
-        background: "#f0f2f5",
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        minHeight: '100vh',
+        padding: '0 10vw',
+        background: '#f0f2f5',
       }}
     >
       <div className={styles.card}>
         <h4>Ms. Engineer </h4>
         <h1>Daily Report管理帳</h1>
-        <Image
-          src="/top-icon.png"
-          alt="トップページアイコン"
-          width={250}
-          height={250}
-        />
+        <Image src="/top-icon.png" alt="トップページアイコン" width={250} height={250} />
       </div>
 
       <div
         style={{
-          maxWidth: "400px",
-          margin: "40px auto",
-          padding: "24px",
-          background: "#fff",
-          borderRadius: "8px",
-          boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+          maxWidth: '400px',
+          margin: '40px auto',
+          padding: '24px',
+          background: '#fff',
+          borderRadius: '8px',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
         }}
       >
         <form onSubmit={doLogin}>
-          <div style={{ marginBottom: "1rem" }}>
+          <div style={{ marginBottom: '1rem' }}>
             <label>
               メールアドレス：
               <input
@@ -73,16 +68,16 @@ export default function LoginHome() {
                 name="email"
                 style={{
                   height: 50,
-                  fontSize: "1.2rem",
-                  display: "block",
-                  width: "100%",
+                  fontSize: '1.2rem',
+                  display: 'block',
+                  width: '100%',
                 }}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </label>
           </div>
-          <div style={{ marginBottom: "1rem" }}>
+          <div style={{ marginBottom: '1rem' }}>
             <label>
               パスワード：
               <input
@@ -90,19 +85,16 @@ export default function LoginHome() {
                 name="password"
                 style={{
                   height: 50,
-                  fontSize: "1.2rem",
-                  display: "block",
-                  width: "100%",
+                  fontSize: '1.2rem',
+                  display: 'block',
+                  width: '100%',
                 }}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </label>
           </div>
-          <button
-            type="submit"
-            style={{ width: 220, height: 50, fontSize: "1.2rem" }}
-          >
+          <button type="submit" style={{ width: 220, height: 50, fontSize: '1.2rem' }}>
             ログイン
           </button>
         </form>
