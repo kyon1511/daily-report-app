@@ -64,4 +64,25 @@ def update_report(
 
     return db_report
 
+@router.delete("/{report_id}", response_model=schemas.DailyReport)
+def delete_report(
+    report_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user),
+):
+    """
+    ログインユーザーが指定した日報を削除するエンドポイント
+    """
+    db_report = crud.delete_daily_report(
+        db=db, report_id=report_id, owner_id=current_user.id
+    )
+
+    if db_report is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="日報が見つかりません"
+        )
+
+    return db_report
+
+
 
